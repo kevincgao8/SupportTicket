@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support Ticket Triage</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eec 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            padding: 40px;
+        }
+
+        .input-section {
+            margin-bottom: 40px;
+        }
+
+        .input-section label {
+            display: block;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #374151;
+        }
+
+        .ticket-textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            resize: vertical;
+            transition: border-color 0.2s ease;
+        }
+
+        .ticket-textarea:focus {
+            outline: none;
+            border-color: #4f46e5;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .triage-button {
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin-top: 20px;
+        }
+
+        .triage-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(79, 70, 229, 0.3);
+        }
+
+        .triage-button:active {
+            transform: translateY(0);
+        }
+
+        .triage-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 1s ease-in-out infinite;
+            margin-right: 10px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .results-section {
+            display: none;
+            margin-top: 40px;
+        }
+
+        .results-section.show {
+            display: block;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .result-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .result-card {
+            background: #f9fafb;
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 4px solid #4f46e5;
+        }
+
+        .result-card.category-billing {
+            border-left-color: #ef4444;
+        }
+
+        .result-card.category-bug {
+            border-left-color: #f59e0b;
+        }
+
+        .result-card.category-feature {
+            border-left-color: #10b981;
+        }
+
+        .result-card.category-other {
+            border-left-color: #6b7280;
+        }
+
+        .result-card.urgency-high {
+            border-left-color: #ef4444;
+        }
+
+        .result-card.urgency-medium {
+            border-left-color: #f59e0b;
+        }
+
+        .result-card.urgency-low {
+            border-left-color: #10b981;
+        }
+
+        .result-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #6b7280;
+            margin-bottom: 8px;
+        }
+
+        .result-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #111827;
+        }
+
+        .result-value.category-billing {
+            color: #dc2626;
+        }
+
+        .result-value.category-bug {
+            color: #d97706;
+        }
+
+        .result-value.category-feature {
+            color: #059669;
+        }
+
+        .result-value.category-other {
+            color: #374151;
+        }
+
+        .result-value.urgency-high {
+            color: #dc2626;
+        }
+
+        .result-value.urgency-medium {
+            color: #d97706;
+        }
+
+        .result-value.urgency-low {
+            color: #059669;
+        }
+
+        .rationale-section {
+            background: #f3f4f6;
+            border-radius: 12px;
+            padding: 25px;
+            border-left: 4px solid #6b7280;
+        }
+
+        .rationale-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: #374151;
+        }
+
+        .error-message {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 16px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+
+        .example-tickets {
+            margin-top: 40px;
+            padding: 25px;
+            background: #f8fafc;
+            border-radius: 12px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .example-tickets h3 {
+            color: #374151;
+            margin-bottom: 15px;
+            font-size: 1.1rem;
+        }
+
+        .example-ticket {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #e2e8f0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .example-ticket:hover {
+            background: #f1f5f9;
+            border-color: #4f46e5;
+        }
+
+        .example-ticket:last-child {
+            margin-bottom: 0;
+        }
+
+        .example-text {
+            font-style: italic;
+            color: #64748b;
+        }
+
+        .example-result {
+            font-size: 0.875rem;
+            color: #6b7280;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎫 Support Ticket Triage</h1>
+            <p>Paste your ticket and get instant categorization & priority assessment</p>
+        </div>
+
+        <div class="main-content">
+            <div class="input-section">
+                <label for="ticket-text">Support Ticket Text:</label>
+                <textarea 
+                    id="ticket-text" 
+                    class="ticket-textarea" 
+                    placeholder="Paste your support ticket here...&#10;&#10;Example: I was charged twice after updating my card"
+                ></textarea>
+                
+                <button id="triage-btn" class="triage-button">
+                    <span id="btn-text">🔍 Triage Ticket</span>
+                </button>
+
+                <div id="error-message" class="error-message"></div>
+            </div>
+
+            <div id="results-section" class="results-section">
+                <div class="result-grid">
+                    <div class="result-card" id="category-card">
+                        <div class="result-label">Category</div>
+                        <div class="result-value" id="category-value">-</div>
+                    </div>
+                    
+                    <div class="result-card" id="urgency-card">
+                        <div class="result-label">Urgency</div>
+                        <div class="result-value" id="urgency-value">-</div>
+                    </div>
+                </div>
+
+                <div class="rationale-section">
+                    <div class="result-label">Rationale</div>
+                    <div class="rationale-text" id="rationale-text">-</div>
+                </div>
+            </div>
+
+            <div class="example-tickets">
+                <h3>💡 Try these example tickets:</h3>
+                <div class="example-ticket" data-text="I was charged twice after updating my card">
+                    <div class="example-text">"I was charged twice after updating my card"</div>
+                    <div class="example-result">Expected: billing, high urgency</div>
+                </div>
+                <div class="example-ticket" data-text="The app keeps crashing when I try to upload photos">
+                    <div class="example-text">"The app keeps crashing when I try to upload photos"</div>
+                    <div class="example-result">Expected: bug, high urgency</div>
+                </div>
+                <div class="example-ticket" data-text="It would be great if you could add dark mode to the interface">
+                    <div class="example-text">"It would be great if you could add dark mode to the interface"</div>
+                    <div class="example-result">Expected: feature, low urgency</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const ticketTextarea = document.getElementById('ticket-text');
+        const triageBtn = document.getElementById('triage-btn');
+        const btnText = document.getElementById('btn-text');
+        const resultsSection = document.getElementById('results-section');
+        const categoryValue = document.getElementById('category-value');
+        const urgencyValue = document.getElementById('urgency-value');
+        const rationaleText = document.getElementById('rationale-text');
+        const errorMessage = document.getElementById('error-message');
+        const exampleTickets = document.querySelectorAll('.example-ticket');
+
+        // Example ticket click handlers
+        exampleTickets.forEach(ticket => {
+            ticket.addEventListener('click', () => {
+                const text = ticket.getAttribute('data-text');
+                ticketTextarea.value = text;
+                ticketTextarea.focus();
+            });
+        });
+
+        // Triage button click handler
+        triageBtn.addEventListener('click', async () => {
+            const text = ticketTextarea.value.trim();
+            
+            if (!text) {
+                showError('Please enter some ticket text to triage.');
+                return;
+            }
+
+            // Clear previous results and errors
+            hideError();
+            hideResults();
+            
+            // Show loading state
+            setLoading(true);
+
+            try {
+                const response = await fetch('/api/triage', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text })
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to triage ticket');
+                }
+
+                const result = await response.json();
+                displayResults(result);
+                
+            } catch (error) {
+                showError(error.message || 'An error occurred while triaging the ticket.');
+            } finally {
+                setLoading(false);
+            }
+        });
+
+        function setLoading(loading) {
+            if (loading) {
+                triageBtn.disabled = true;
+                btnText.innerHTML = '<span class="loading"></span>Triaging...';
+            } else {
+                triageBtn.disabled = false;
+                btnText.innerHTML = '🔍 Triage Ticket';
+            }
+        }
+
+        function displayResults(result) {
+            // Update category
+            categoryValue.textContent = result.category;
+            categoryValue.className = `result-value category-${result.category}`;
+            document.getElementById('category-card').className = `result-card category-${result.category}`;
+
+            // Update urgency
+            urgencyValue.textContent = result.urgency;
+            urgencyValue.className = `result-value urgency-${result.urgency}`;
+            document.getElementById('urgency-card').className = `result-card urgency-${result.urgency}`;
+
+            // Update rationale
+            rationaleText.textContent = result.rationale;
+
+            // Show results
+            resultsSection.classList.add('show');
+        }
+
+        function hideResults() {
+            resultsSection.classList.remove('show');
+        }
+
+        function showError(message) {
+            errorMessage.textContent = message;
+            errorMessage.classList.add('show');
+        }
+
+        function hideError() {
+            errorMessage.classList.remove('show');
+        }
+
+        // Enter key handler for textarea
+        ticketTextarea.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                e.preventDefault();
+                triageBtn.click();
+            }
+        });
+
+        // Auto-resize textarea
+        ticketTextarea.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = Math.min(this.scrollHeight, 300) + 'px';
+        });
+    </script>
+</body>
+</html>
