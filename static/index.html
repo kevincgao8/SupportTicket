@@ -53,6 +53,41 @@
             margin-bottom: 40px;
         }
 
+        .input-tabs {
+            display: flex;
+            margin-bottom: 25px;
+            border-bottom: 2px solid #e5e7eb;
+        }
+
+        .tab-button {
+            background: none;
+            border: none;
+            padding: 15px 25px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: #6b7280;
+            cursor: pointer;
+            border-bottom: 3px solid transparent;
+            transition: all 0.2s ease;
+        }
+
+        .tab-button:hover {
+            color: #4f46e5;
+        }
+
+        .tab-button.active {
+            color: #4f46e5;
+            border-bottom-color: #4f46e5;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
         .input-section label {
             display: block;
             font-size: 1.1rem;
@@ -105,6 +140,70 @@
             opacity: 0.6;
             cursor: not-allowed;
             transform: none;
+        }
+
+        .bulk-button {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .bulk-button:hover {
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .bulk-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .reset-button {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+        }
+
+        .reset-button:hover {
+            box-shadow: 0 10px 25px rgba(107, 114, 128, 0.3);
+        }
+
+        .file-upload-area {
+            margin-bottom: 20px;
+        }
+
+        .file-drop-zone {
+            border: 2px dashed #d1d5db;
+            border-radius: 12px;
+            padding: 40px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #f9fafb;
+        }
+
+        .file-drop-zone:hover {
+            border-color: #4f46e5;
+            background: #f3f4f6;
+        }
+
+        .file-drop-zone.dragover {
+            border-color: #4f46e5;
+            background: #eef2ff;
+        }
+
+        .file-upload-icon {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.7;
+        }
+
+        .file-upload-text {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .file-upload-hint {
+            font-size: 0.9rem;
+            color: #6b7280;
         }
 
         .loading {
@@ -298,6 +397,161 @@
             color: #6b7280;
             margin-top: 5px;
         }
+
+        .bulk-results {
+            margin-top: 30px;
+        }
+
+        .bulk-summary {
+            background: #f0f9ff;
+            border: 1px solid #0ea5e9;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+        }
+
+        .bulk-summary h3 {
+            color: #0369a1;
+            margin-bottom: 15px;
+            font-size: 1.2rem;
+        }
+
+        .bulk-summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e0f2fe;
+        }
+
+        .stat-number {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0369a1;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-top: 5px;
+        }
+
+        .ticket-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .ticket-item {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 12px;
+            padding: 20px;
+            border-left: 4px solid #4f46e5;
+        }
+
+        .ticket-item.category-billing {
+            border-left-color: #ef4444;
+        }
+
+        .ticket-item.category-bug {
+            border-left-color: #f59e0b;
+        }
+
+        .ticket-item.category-feature {
+            border-left-color: #10b981;
+        }
+
+        .ticket-item.category-other {
+            border-left-color: #6b7280;
+        }
+
+        .ticket-item.urgency-high {
+            border-left-color: #ef4444;
+        }
+
+        .ticket-item.urgency-medium {
+            border-left-color: #f59e0b;
+        }
+
+        .ticket-item.urgency-low {
+            border-left-color: #10b981;
+        }
+
+        .ticket-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .ticket-text {
+            font-size: 1rem;
+            color: #374151;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            font-style: italic;
+            background: #f9fafb;
+            padding: 12px;
+            border-radius: 8px;
+        }
+
+        .ticket-meta {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 15px;
+        }
+
+        .meta-item {
+            text-align: center;
+        }
+
+        .meta-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            color: #6b7280;
+            margin-bottom: 5px;
+        }
+
+        .meta-value {
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .meta-value.category-billing {
+            color: #dc2626;
+        }
+
+        .meta-value.category-bug {
+            color: #d97706;
+        }
+
+        .meta-value.category-feature {
+            color: #059669;
+        }
+
+        .meta-value.category-other {
+            color: #374151;
+        }
+
+        .meta-value.urgency-high {
+            color: #dc2626;
+        }
+
+        .meta-value.urgency-medium {
+            color: #d97706;
+        }
+
+        .meta-value.urgency-low {
+            color: #059669;
+        }
     </style>
 </head>
 <body>
@@ -309,16 +563,48 @@
 
         <div class="main-content">
             <div class="input-section">
-                <label for="ticket-text">Support Ticket Text:</label>
-                <textarea 
-                    id="ticket-text" 
-                    class="ticket-textarea" 
-                    placeholder="Paste your support ticket here...&#10;&#10;Example: I was charged twice after updating my card"
-                ></textarea>
+                <div class="input-tabs">
+                    <button class="tab-button active" data-tab="single">📝 Single Ticket</button>
+                    <button class="tab-button" data-tab="bulk">📊 Bulk CSV Upload</button>
+                </div>
                 
-                <button id="triage-btn" class="triage-button">
-                    <span id="btn-text">🔍 Triage Ticket</span>
-                </button>
+                <div class="tab-content active" id="single-tab">
+                    <label for="ticket-text">Support Ticket Text:</label>
+                    <textarea 
+                        id="ticket-text" 
+                        class="ticket-textarea" 
+                        placeholder="Paste your support ticket here...&#10;&#10;Example: I was charged twice after updating my card"
+                    ></textarea>
+                    
+                    <button id="triage-btn" class="triage-button">
+                        <span id="btn-text">🔍 Triage Ticket</span>
+                    </button>
+                </div>
+                
+                <div class="tab-content" id="bulk-tab">
+                    <label for="csv-file">Upload CSV File:</label>
+                    <div class="file-upload-area">
+                        <input type="file" id="csv-file" accept=".csv" style="display: none;">
+                        <div class="file-drop-zone" id="file-drop-zone">
+                            <div class="file-upload-icon">📁</div>
+                            <div class="file-upload-text">
+                                <strong>Click to upload CSV</strong> or drag and drop
+                            </div>
+                            <div class="file-upload-hint">
+                                Each cell in your CSV will be treated as a separate support ticket
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="bulk-buttons">
+                        <button id="bulk-triage-btn" class="triage-button bulk-button">
+                            <span id="bulk-btn-text">📊 Process CSV</span>
+                        </button>
+                        <button id="reset-csv-btn" class="triage-button reset-button" onclick="resetFileUpload()">
+                            🔄 Reset
+                        </button>
+                    </div>
+                </div>
 
                 <div id="error-message" class="error-message"></div>
             </div>
@@ -339,6 +625,38 @@
                 <div class="rationale-section">
                     <div class="result-label">Rationale</div>
                     <div class="rationale-text" id="rationale-text">-</div>
+                </div>
+            </div>
+
+            <div id="bulk-results-section" class="results-section bulk-results">
+                <div class="bulk-summary">
+                    <h3>📊 Bulk Processing Results</h3>
+                    <div class="bulk-summary-stats">
+                        <div class="stat-item">
+                            <div class="stat-number" id="total-processed">0</div>
+                            <div class="stat-label">Total Tickets</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="billing-count">0</div>
+                            <div class="stat-label">Billing</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="bug-count">0</div>
+                            <div class="stat-label">Bugs</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="feature-count">0</div>
+                            <div class="stat-label">Features</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number" id="high-urgency-count">0</div>
+                            <div class="stat-label">High Priority</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="ticket-list" id="ticket-list">
+                    <!-- Ticket items will be populated here -->
                 </div>
             </div>
 
@@ -370,6 +688,107 @@
         const rationaleText = document.getElementById('rationale-text');
         const errorMessage = document.getElementById('error-message');
         const exampleTickets = document.querySelectorAll('.example-ticket');
+        
+        // Bulk processing elements
+        const bulkTriageBtn = document.getElementById('bulk-triage-btn');
+        const bulkBtnText = document.getElementById('bulk-btn-text');
+        const bulkResultsSection = document.getElementById('bulk-results-section');
+        const csvFileInput = document.getElementById('csv-file');
+        const fileDropZone = document.getElementById('file-drop-zone');
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // Tab switching functionality
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const targetTab = button.getAttribute('data-tab');
+                
+                // Update active tab button
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                button.classList.add('active');
+                
+                // Update active tab content
+                tabContents.forEach(content => content.classList.remove('active'));
+                document.getElementById(`${targetTab}-tab`).classList.add('active');
+                
+                // Hide all results when switching tabs
+                hideResults();
+                hideBulkResults();
+            });
+        });
+
+        // File upload handlers
+        fileDropZone.addEventListener('click', () => {
+            csvFileInput.click();
+        });
+
+        csvFileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                handleFileSelect(file);
+            }
+        });
+
+        // Reset file upload area
+        function resetFileUpload() {
+            fileDropZone.innerHTML = `
+                <div class="file-upload-icon">📁</div>
+                <div class="file-upload-text">
+                    <strong>Click to upload CSV</strong> or drag and drop
+                </div>
+                <div class="file-upload-hint">
+                    Each cell in your CSV will be treated as a separate support ticket
+                </div>
+            `;
+            csvFileInput.value = '';
+        }
+
+        // Drag and drop functionality
+        fileDropZone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            fileDropZone.classList.add('dragover');
+        });
+
+        fileDropZone.addEventListener('dragleave', () => {
+            fileDropZone.classList.remove('dragover');
+        });
+
+        fileDropZone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            fileDropZone.classList.remove('dragover');
+            
+            const files = e.dataTransfer.files;
+            if (files.length > 0 && files[0].type === 'text/csv') {
+                handleFileSelect(files[0]);
+            }
+        });
+
+        function handleFileSelect(file) {
+            if (!file.name.endsWith('.csv')) {
+                showError('Please select a CSV file.');
+                return;
+            }
+            
+            // Update UI to show selected file
+            fileDropZone.innerHTML = `
+                <div class="file-upload-icon">✅</div>
+                <div class="file-upload-text">
+                    <strong>${file.name}</strong> selected
+                </div>
+                <div class="file-upload-hint">
+                    Click "Process CSV" to triage all tickets
+                </div>
+            `;
+            
+            // Store the file for processing
+            const dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
+            csvFileInput.files = dataTransfer.files;
+            
+            // Debug: log the file input to verify
+            console.log('File input files:', csvFileInput.files);
+            console.log('File input files length:', csvFileInput.files.length);
+        }
 
         // Example ticket click handlers
         exampleTickets.forEach(ticket => {
@@ -420,6 +839,59 @@
             }
         });
 
+        // Bulk triage button click handler
+        bulkTriageBtn.addEventListener('click', async () => {
+            console.log('Bulk triage button clicked');
+            console.log('CSV file input files:', csvFileInput.files);
+            console.log('CSV file input files length:', csvFileInput.files.length);
+            
+            const file = csvFileInput.files[0];
+            console.log('Selected file:', file);
+            
+            if (!file) {
+                showError('Please select a CSV file to process.');
+                return;
+            }
+
+            console.log('Processing file:', file.name, 'Size:', file.size);
+
+            // Clear previous results and errors
+            hideError();
+            hideBulkResults();
+            
+            // Show loading state
+            setBulkLoading(true);
+
+            try {
+                const formData = new FormData();
+                formData.append('file', file);
+                
+                console.log('FormData created, sending request...');
+
+                const response = await fetch('/api/triage/bulk', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                console.log('Response received:', response.status, response.statusText);
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.detail || 'Failed to process CSV');
+                }
+
+                const result = await response.json();
+                console.log('Result received:', result);
+                displayBulkResults(result);
+                
+            } catch (error) {
+                console.error('Error processing CSV:', error);
+                showError(error.message || 'An error occurred while processing the CSV.');
+            } finally {
+                setBulkLoading(false);
+            }
+        });
+
         function setLoading(loading) {
             if (loading) {
                 triageBtn.disabled = true;
@@ -427,6 +899,16 @@
             } else {
                 triageBtn.disabled = false;
                 btnText.innerHTML = '🔍 Triage Ticket';
+            }
+        }
+
+        function setBulkLoading(loading) {
+            if (loading) {
+                bulkTriageBtn.disabled = true;
+                bulkBtnText.innerHTML = '<span class="loading"></span>Processing...';
+            } else {
+                bulkTriageBtn.disabled = false;
+                bulkBtnText.innerHTML = '📊 Process CSV';
             }
         }
 
@@ -450,6 +932,64 @@
 
         function hideResults() {
             resultsSection.classList.remove('show');
+        }
+
+        function displayBulkResults(result) {
+            // Update summary statistics
+            document.getElementById('total-processed').textContent = result.total_processed;
+            
+            // Count categories and urgency levels
+            const categoryCounts = { billing: 0, bug: 0, feature: 0, other: 0 };
+            const urgencyCounts = { high: 0, medium: 0, low: 0 };
+            
+            result.tickets.forEach(ticket => {
+                categoryCounts[ticket.category]++;
+                urgencyCounts[ticket.urgency]++;
+            });
+            
+            document.getElementById('billing-count').textContent = categoryCounts.billing;
+            document.getElementById('bug-count').textContent = categoryCounts.bug;
+            document.getElementById('feature-count').textContent = categoryCounts.feature;
+            document.getElementById('high-urgency-count').textContent = urgencyCounts.high;
+            
+            // Generate ticket list HTML
+            const ticketList = document.getElementById('ticket-list');
+            ticketList.innerHTML = '';
+            
+            result.tickets.forEach((ticket, index) => {
+                const ticketItem = document.createElement('div');
+                ticketItem.className = `ticket-item category-${ticket.category} urgency-${ticket.urgency}`;
+                
+                ticketItem.innerHTML = `
+                    <div class="ticket-header">
+                        <h4>Ticket #${index + 1}</h4>
+                    </div>
+                    <div class="ticket-text">${ticket.text || 'No text provided'}</div>
+                    <div class="ticket-meta">
+                        <div class="meta-item">
+                            <div class="meta-label">Category</div>
+                            <div class="meta-value category-${ticket.category}">${ticket.category}</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Urgency</div>
+                            <div class="meta-value urgency-${ticket.urgency}">${ticket.urgency}</div>
+                        </div>
+                        <div class="meta-item">
+                            <div class="meta-label">Rationale</div>
+                            <div class="meta-value">${ticket.rationale}</div>
+                        </div>
+                    </div>
+                `;
+                
+                ticketList.appendChild(ticketItem);
+            });
+            
+            // Show bulk results
+            bulkResultsSection.classList.add('show');
+        }
+
+        function hideBulkResults() {
+            bulkResultsSection.classList.remove('show');
         }
 
         function showError(message) {

@@ -1,9 +1,11 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, UploadFile, File
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
-from typing import Literal
+from typing import Literal, List
 import re
+import csv
+import io
 
 app = FastAPI(title="Support Ticket Triage", version="1.0.0")
 
@@ -14,6 +16,11 @@ class TriageResponse(BaseModel):
     category: Literal["billing", "bug", "feature", "other"]
     urgency: Literal["low", "medium", "high"]
     rationale: str
+    text: str = ""  # Original ticket text
+
+class BulkTriageResponse(BaseModel):
+    tickets: List[TriageResponse]
+    total_processed: int
 
 def categorize_ticket(text: str) -> str:
     """Determine ticket category based on keywords"""
@@ -155,8 +162,73 @@ async def triage_ticket(request: TriageRequest):
     return TriageResponse(
         category=category,
         urgency=urgency,
-        rationale=rationale
+        rationale=rationale,
+        text=request.text
     )
+
+def process_csv_tickets(csv_content: str) -> List[str]:
+    """Parse CSV content and extract ticket texts from cells"""
+    tickets = []
+    
+    try:
+        # Create a StringIO object to read the CSV content
+        csv_file = io.StringIO(csv_content)
+        csv_reader = csv.reader(csv_file)
+        
+        for row in csv_reader:
+            for cell in row:
+                # Clean the cell content and add if it's not empty
+                cell_text = cell.strip()
+                if cell_text and len(cell_text) > 3:  # Minimum length to be meaningful
+                    tickets.append(cell_text)
+    
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Invalid CSV format: {str(e)}")
+    
+    return tickets
+
+@app.post("/api/triage/bulk", response_model=BulkTriageResponse)
+async def triage_bulk_tickets(file: UploadFile = File(...)):
+    """Triage multiple support tickets from a CSV file"""
+    
+    # Validate file type
+    if not file.filename.endswith('.csv'):
+        raise HTTPException(status_code=400, detail="File must be a CSV file")
+    
+    try:
+        # Read CSV content
+        csv_content = await file.read()
+        csv_text = csv_content.decode('utf-8')
+        
+        # Extract ticket texts from CSV
+        ticket_texts = process_csv_tickets(csv_text)
+        
+        if not ticket_texts:
+            raise HTTPException(status_code=400, detail="No valid ticket texts found in CSV")
+        
+        # Process each ticket
+        triaged_tickets = []
+        for text in ticket_texts:
+            category = categorize_ticket(text)
+            urgency = determine_urgency(text, category)
+            rationale = generate_rationale(category, urgency, text)
+            
+            triaged_tickets.append(TriageResponse(
+                category=category,
+                urgency=urgency,
+                rationale=rationale,
+                text=text
+            ))
+        
+        return BulkTriageResponse(
+            tickets=triaged_tickets,
+            total_processed=len(triaged_tickets)
+        )
+        
+    except UnicodeDecodeError:
+        raise HTTPException(status_code=400, detail="CSV file must be UTF-8 encoded")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Error processing CSV: {str(e)}")
 
 @app.get("/")
 async def read_index():
